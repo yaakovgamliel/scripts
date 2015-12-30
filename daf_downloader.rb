@@ -1,22 +1,25 @@
-#require 'httparty'
+
+#  ____         ____   __              _ 
+# |  _ \  __ _ / _\ \ / /__  _ __ ___ (_)
+# | | | |/ _` | |_ \ V / _ \| '_ ` _ \| |
+# | |_| | (_| |  _| | | (_) | | | | | | |
+# |____/ \__,_|_|   |_|\___/|_| |_| |_|_|
+#                                       
+#
+
+require 'httparty'
 require 'net/http'
 require 'uri'
 
 class DafYomi
-	
+
   BASE_URL = "http://www.kolhalashon.com/imgs/Vilna/"
-
-  #include HTTParty 
-
+  include HTTParty 
 	attr_accessor :tractate, :amud
 
 	def initialize(tractate, amud)
 		@tractate = tractate
 		@amud = amud
-	end
-
-	def tractate_name
-	  @tractate
 	end
 
   def download
@@ -25,7 +28,7 @@ class DafYomi
 		how_many.times do
 			counter += 1
 			start_download(counter)
-			sleep 5
+			sleep 2
 		end	
 	end
 
@@ -39,29 +42,10 @@ class DafYomi
   private
 
   #TODO: Add multithread download 
-
-  # This metho uses HTTParty 
-	#
-	#def start_download(blatt)
-	#	File.open("/tmp/#{tractate_name}_#{blatt}.pdf", "wb") do |f|
-  #    f.write HTTParty.get("http://www.kolhalashon.com/imgs/Vilna/#{tractate_name}/#{tractate_name}_Amud_#{amud_conversion(blatt)}.pdf").parsed_response
-  #  end
-	#end
-
+ 	
 	def start_download(blatt)
-
-		uri = URI("#{BASE_URL}#{tractate_name}/#{tractate_name}_Amud_#{amud_conversion(blatt)}.pdf")
-		
-		puts uri
-
-    http = Net::HTTP.new(uri.host, uri.port)
-
-    req = Net::HTTP::Get.new(uri)
-    		
-		res =  http.request(req)
-
 	  File.open("/tmp/#{tractate_name}_#{blatt}.pdf", "wb") do |f|
-      f.write res.body
+      f.write HTTParty.get("http://www.kolhalashon.com/imgs/Vilna/#{tractate_name}/#{tractate_name}_Amud_#{amud_conversion(blatt)}.pdf").parsed_response
     end
 	end
 

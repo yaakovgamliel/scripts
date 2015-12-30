@@ -18,6 +18,16 @@ class String
   end
 end
 
+HELP = <<HELP
+Push certificate key configurator:
+by @yaakov_g
+
+Options:
+
+-c <certificate file path> -- this is the certificate provide by Apple
+-k <key> -- key generated during certificate request
+
+HELP
 
 options = {}
 option_parser = OptionParser.new do |opts|
@@ -27,7 +37,7 @@ option_parser = OptionParser.new do |opts|
   end
 
   opts.on("-","--") do
-    options[:] = true
+    #options[:] = true
   end
 
   opts.on("-k KEY") do |key|
@@ -57,7 +67,9 @@ option_parser.parse!
 system("openssl x509 -in #{options[:cert]} -inform der -out #{options[:key]}.pem")
 system("openssl pkcs12 -nocerts -out #{options[:out_key]}.pem -in #{options[:key]}")
 system("cat > #{options[:pem]}")
-system(")
+system("")
+
+puts "[*] Your certificates was created"
 
 
 
